@@ -1,20 +1,23 @@
 package com.coderhouse.onlinesales.dto;
 
 import com.coderhouse.onlinesales.model.Invoice;
-import com.coderhouse.onlinesales.model.Product;
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.Data;
 
 @Data
 public class InvoiceDetailDTO {
-    public InvoiceDetailDTO(Integer id, Integer productAmount, Double subtotal, Invoice invoice, Product product) {
+    public InvoiceDetailDTO(Integer id, Integer productAmount, Double subtotal, Integer idInvoice, Integer idProduct) {
         this.id = id;
         this.productAmount = productAmount;
         this.subtotal = subtotal;
-        this.invoice = invoice;
-        this.product = product;
+        this.idInvoice = idInvoice;
+        this.idProduct = idProduct;
+    }
+
+    public InvoiceDetailDTO(Integer productAmount, Double subtotal, Integer idInvoice, Integer idProduct) {
+        this.productAmount = productAmount;
+        this.subtotal = subtotal;
+        this.idInvoice = idInvoice;
+        this.idProduct = idProduct;
     }
 
     public InvoiceDetailDTO() {
@@ -22,6 +25,6 @@ public class InvoiceDetailDTO {
     private Integer id;
     private Integer productAmount;
     private Double subtotal;
-    private Invoice invoice;
-    private Product product;
+    private Integer idInvoice;
+    private Integer idProduct;
 }

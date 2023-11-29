@@ -8,6 +8,17 @@ import lombok.Data;
 @Table(name="products")
 public class Product {
 
+    public Product(Integer id, String code, String description, Integer stock, Double unitPrice) {
+        this.id = id;
+        this.code = code;
+        this.description = description;
+        this.stock = stock;
+        this.unitPrice = unitPrice;
+    }
+
+    public Product() {
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

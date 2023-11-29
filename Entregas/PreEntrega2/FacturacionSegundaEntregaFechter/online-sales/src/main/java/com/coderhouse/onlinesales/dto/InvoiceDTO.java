@@ -1,24 +1,33 @@
 package com.coderhouse.onlinesales.dto;
 
-import com.coderhouse.onlinesales.model.Client;
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
 @Data
 public class InvoiceDTO {
-    public InvoiceDTO(Integer id, LocalDateTime date, Double total, Integer client_id) {
+    public InvoiceDTO(Integer id, LocalDateTime date, Double total, Integer idClient, List<InvoiceDetailDTO> invoiceDetails) {
+        this.id = id;
         this.date = date;
         this.total = total;
-        this.client_id = client_id;
+        this.idClient = idClient;
+        this.invoiceDetails = invoiceDetails;
+    }
+
+    public InvoiceDTO(LocalDateTime date, Double total, Integer idClient, List<InvoiceDetailDTO> invoiceDetails) {
+        this.date = date;
+        this.total = total;
+        this.idClient = idClient;
+        this.invoiceDetails = invoiceDetails;
     }
 
     public InvoiceDTO() {
     }
+
     private Integer id;
     private LocalDateTime date;
     private Double total;
-    private Integer client_id;
+    private Integer idClient;
+    private List<InvoiceDetailDTO> invoiceDetails;
 }
