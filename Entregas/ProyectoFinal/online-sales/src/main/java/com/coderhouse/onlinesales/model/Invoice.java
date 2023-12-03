@@ -2,16 +2,20 @@ package com.coderhouse.onlinesales.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name="invoices")
 public class Invoice {
-    public Invoice(Integer id, LocalDateTime date, Double total, Client client, List<InvoiceDetail> invoiceDetails) {
+    public Invoice(Integer id, LocalDateTime date, Double total, Client client, Set<InvoiceDetail> invoiceDetails) {
         this.id = id;
         this.date = date;
         this.total = total;
@@ -19,7 +23,7 @@ public class Invoice {
         this.invoiceDetails = invoiceDetails;
     }
 
-    public Invoice(LocalDateTime date, Double total, Client client, List<InvoiceDetail> invoiceDetails) {
+    public Invoice(LocalDateTime date, Double total, Client client, Set<InvoiceDetail> invoiceDetails) {
         this.date = date;
         this.total = total;
         this.client = client;
@@ -39,9 +43,9 @@ public class Invoice {
     @JoinColumn(name = "client_id",nullable = false)
     private Client client;
     @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL)
-    private List<InvoiceDetail> invoiceDetails;
+    private Set<InvoiceDetail> invoiceDetails;
 
-    public void addDetails(List<InvoiceDetail> newInvoiceDetails) {
+    public void addDetails(Set<InvoiceDetail> newInvoiceDetails) {
         for (InvoiceDetail invoiceDetail : newInvoiceDetails) {
             invoiceDetail.setInvoice(this);
         }

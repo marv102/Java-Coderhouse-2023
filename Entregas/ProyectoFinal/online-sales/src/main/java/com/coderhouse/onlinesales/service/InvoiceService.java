@@ -18,9 +18,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+
 @Service
 public class InvoiceService {
     @Autowired
@@ -32,6 +31,8 @@ public class InvoiceService {
 
     public InvoiceDTO create(InvoiceDTO invoiceDTO) {
 
+        System.out.println("WWWWWWWWWWWW");
+
         boolean clientExists = clientExits(invoiceDTO.getIdClient());
 
         boolean productsExist = productsExist(invoiceDTO.getInvoiceDetails());
@@ -42,7 +43,7 @@ public class InvoiceService {
 
             Invoice invoice = createInvoice(invoiceDTO);
 
-            List<InvoiceDetailDTO> invoiceDetailsDTO = this.getDTOFromInvoiceDetails(invoice.getInvoiceDetails());
+            Set<InvoiceDetailDTO> invoiceDetailsDTO = this.getDTOFromInvoiceDetails(invoice.getInvoiceDetails());
 
             Invoice invoiceSaved = invoiceRepository.save(invoice);
 
@@ -60,7 +61,7 @@ public class InvoiceService {
 
         if(invoiceOptional.isPresent()){
             Invoice invoice = invoiceOptional.get();
-            List<InvoiceDetailDTO> invoiceDetailsDTO = this.getDTOFromInvoiceDetails(invoice.getInvoiceDetails());
+            Set<InvoiceDetailDTO> invoiceDetailsDTO = this.getDTOFromInvoiceDetails(invoice.getInvoiceDetails());
             return new InvoiceDTO(invoice.getId(), invoice.getDate(),invoice.getTotal(), invoice.getClient().getId(),invoiceDetailsDTO);
         }
         return null;
@@ -75,7 +76,7 @@ public class InvoiceService {
         return clientOptional.isPresent() ? true : false;
     }
 
-    public boolean productsExist(List<InvoiceDetailDTO> invoiceDetails){
+    public boolean productsExist(Set<InvoiceDetailDTO> invoiceDetails){
         for(InvoiceDetailDTO invoiceDetail : invoiceDetails){
 
             Optional<Product> productOptional = productRepository.findById(invoiceDetail.getIdProduct());
@@ -85,7 +86,7 @@ public class InvoiceService {
         return true;
     }
 
-    public boolean stockExists(List<InvoiceDetailDTO> invoiceDetails){
+    public boolean stockExists(Set<InvoiceDetailDTO> invoiceDetails){
         if(!productsExist(invoiceDetails)){
             return false;
         }
@@ -114,7 +115,7 @@ public class InvoiceService {
 
         LocalDateTime date = LocalDateTime.now();
 
-        List<InvoiceDetail> invoiceDetails = getInvoiceDetailsFromDTO(invoiceDTO.getInvoiceDetails());
+        Set<InvoiceDetail> invoiceDetails = getInvoiceDetailsFromDTO(invoiceDTO.getInvoiceDetails());
 
         Double total = calculateTotal(invoiceDetails);
 
@@ -131,7 +132,7 @@ public class InvoiceService {
         return savedInvoice;
     }
 
-    public Double calculateTotal(List<InvoiceDetail> invoiceDetails){
+    public Double calculateTotal(Set<InvoiceDetail> invoiceDetails){
         Double total = 0d;
 
         for(InvoiceDetail invoiceDetail : invoiceDetails){
@@ -145,8 +146,8 @@ public class InvoiceService {
         return total;
     }
 
-    public List<InvoiceDetail> getInvoiceDetailsFromDTO(List<InvoiceDetailDTO> invoiceDetailsDTO){
-        List<InvoiceDetail> invoiceDetails = new ArrayList<>();
+    public Set<InvoiceDetail> getInvoiceDetailsFromDTO(Set<InvoiceDetailDTO> invoiceDetailsDTO){
+        Set<InvoiceDetail> invoiceDetails = new HashSet<>();
 
         for(InvoiceDetailDTO invoiceDetailDTO : invoiceDetailsDTO){
             Integer productAmount = invoiceDetailDTO.getProductAmount();
@@ -158,8 +159,8 @@ public class InvoiceService {
         return invoiceDetails;
     }
 
-    public List<InvoiceDetailDTO> getDTOFromInvoiceDetails(List<InvoiceDetail> invoiceDetails){
-        List<InvoiceDetailDTO> invoiceDetailsDTO = new ArrayList<>();
+    public Set<InvoiceDetailDTO> getDTOFromInvoiceDetails(Set<InvoiceDetail> invoiceDetails){
+        Set<InvoiceDetailDTO> invoiceDetailsDTO = new HashSet<>();
 
         for(InvoiceDetail invoiceDetail : invoiceDetails){
             Integer id = invoiceDetail.getId();
@@ -174,7 +175,7 @@ public class InvoiceService {
     }
 
 
-    public void updateStock(List<InvoiceDetail> invoiceDetails){
+    public void updateStock(Set<InvoiceDetail> invoiceDetails){
         for(InvoiceDetail invoiceDetail : invoiceDetails){
             Product productDB = productRepository.findById(invoiceDetail.getProduct().getId()).get();
             productDB.setStock(productDB.getStock() - invoiceDetail.getProductAmount());
