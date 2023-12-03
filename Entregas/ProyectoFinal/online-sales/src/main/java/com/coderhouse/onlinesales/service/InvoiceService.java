@@ -3,10 +3,7 @@ package com.coderhouse.onlinesales.service;
 import com.coderhouse.onlinesales.dto.ClientDTO;
 import com.coderhouse.onlinesales.dto.InvoiceDTO;
 import com.coderhouse.onlinesales.dto.InvoiceDetailDTO;
-import com.coderhouse.onlinesales.model.Client;
-import com.coderhouse.onlinesales.model.Invoice;
-import com.coderhouse.onlinesales.model.InvoiceDetail;
-import com.coderhouse.onlinesales.model.Product;
+import com.coderhouse.onlinesales.model.*;
 import com.coderhouse.onlinesales.repository.ClientRepository;
 import com.coderhouse.onlinesales.repository.InvoiceRepository;
 import com.coderhouse.onlinesales.repository.ProductRepository;
@@ -15,6 +12,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
 import java.time.LocalDateTime;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -28,6 +27,9 @@ public class InvoiceService {
     private ClientRepository clientRepository;
     @Autowired
     private InvoiceRepository invoiceRepository;
+
+    @Autowired
+    private RestTemplate restTemplate;
 
     public InvoiceDTO create(InvoiceDTO invoiceDTO) {
 
@@ -113,7 +115,9 @@ public class InvoiceService {
 
     public Invoice createInvoice(InvoiceDTO invoiceDTO){
 
-        LocalDateTime date = LocalDateTime.now();
+        WorldTime worldTime = this.restTemplate.getForObject("https://worldtimeapi.org/api/timezone/America/Argentina/Buenos_Aires",WorldTime.class);
+
+        LocalDateTime date = worldTime.getLocalDateTime();
 
         Set<InvoiceDetail> invoiceDetails = getInvoiceDetailsFromDTO(invoiceDTO.getInvoiceDetails());
 
@@ -139,7 +143,7 @@ public class InvoiceService {
             try{
                 total+=invoiceDetail.getSubtotal();
             }catch (NullPointerException ne){
-                System.out.println("No se pudo calcular el total de los detalles de Factura, los subtotales estan vacios");
+                System.out.println("Total invoice details could not be calculated; the subtotals are empty");
             }
         }
 
