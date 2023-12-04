@@ -19,6 +19,10 @@ public class ProductDTO {
         this.unitPrice = unitPrice;
     }
 
+    public ProductDTO(Integer id) {
+        this.id = id;
+    }
+
     public ProductDTO() {
     }
     private Integer id;

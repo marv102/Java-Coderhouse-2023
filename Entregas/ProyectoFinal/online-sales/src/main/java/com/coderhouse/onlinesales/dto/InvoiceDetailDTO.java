@@ -27,6 +27,7 @@ public class InvoiceDetailDTO {
 
     public InvoiceDetailDTO() {
     }
+
     private Integer id;
     private Integer productAmount;
     private Double subtotal;

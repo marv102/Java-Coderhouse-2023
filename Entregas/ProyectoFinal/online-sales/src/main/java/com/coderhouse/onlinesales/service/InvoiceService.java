@@ -33,9 +33,7 @@ public class InvoiceService {
 
     public InvoiceDTO create(InvoiceDTO invoiceDTO) {
 
-        System.out.println("WWWWWWWWWWWW");
-
-        boolean clientExists = clientExits(invoiceDTO.getIdClient());
+        boolean clientExists = clientExits(invoiceDTO.getClient().getId());
 
         boolean productsExist = productsExist(invoiceDTO.getInvoiceDetails());
 
@@ -47,12 +45,16 @@ public class InvoiceService {
 
             Set<InvoiceDetailDTO> invoiceDetailsDTO = this.getDTOFromInvoiceDetails(invoice.getInvoiceDetails());
 
+            Client client = clientRepository.findById(invoiceDTO.getClient().getId()).get();
+
+            ClientDTO clientDTO = new ClientDTO(client.getId(), client.getFirstName(),client.getLastName(),client.getDocumentNumber());
+
             Invoice invoiceSaved = invoiceRepository.save(invoice);
 
             return new InvoiceDTO( invoiceSaved.getId(),
                                    invoiceSaved.getDate(),
                                    invoiceSaved.getTotal(),
-                                   invoiceSaved.getClient().getId(),
+                                   clientDTO,
                                    invoiceDetailsDTO);
         }
             return null;
@@ -64,7 +66,9 @@ public class InvoiceService {
         if(invoiceOptional.isPresent()){
             Invoice invoice = invoiceOptional.get();
             Set<InvoiceDetailDTO> invoiceDetailsDTO = this.getDTOFromInvoiceDetails(invoice.getInvoiceDetails());
-            return new InvoiceDTO(invoice.getId(), invoice.getDate(),invoice.getTotal(), invoice.getClient().getId(),invoiceDetailsDTO);
+            Client client = clientRepository.findById(invoice.getClient().getId()).get();
+            ClientDTO clientDTO = new ClientDTO(client.getId(), client.getFirstName(),client.getLastName(),client.getDocumentNumber());
+            return new InvoiceDTO(invoice.getId(), invoice.getDate(),invoice.getTotal(), clientDTO,invoiceDetailsDTO);
         }
         return null;
     }
@@ -123,7 +127,7 @@ public class InvoiceService {
 
         Double total = calculateTotal(invoiceDetails);
 
-        Client client = clientRepository.findById(invoiceDTO.getIdClient()).get();
+        Client client = clientRepository.findById(invoiceDTO.getClient().getId()).get();
 
         Invoice invoice = new Invoice(date,total,client,invoiceDetails);
 

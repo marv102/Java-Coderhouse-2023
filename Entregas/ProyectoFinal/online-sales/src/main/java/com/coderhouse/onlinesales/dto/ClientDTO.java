@@ -16,8 +16,13 @@ public class ClientDTO {
         this.documentNumber = documentNumber;
     }
 
+    public ClientDTO(Integer id) {
+        this.id = id;
+    }
+
     public ClientDTO() {
     }
+
     private Integer id;
     private String firstName;
     private String lastName;
