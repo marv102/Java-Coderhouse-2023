@@ -5,19 +5,19 @@ import lombok.Data;
 
 @Data
 public class InvoiceDetailResponseDTO {
-    public InvoiceDetailResponseDTO(Integer idDetail, Integer productDescription, String code, Integer unitPrice, Integer productAmount, Double subtotal) {
-        this.idDetail = idDetail;
+    public InvoiceDetailResponseDTO(Integer idInvoiceDetail, String productDescription, String code, Double unitPrice, Integer amount, Double subtotal) {
+        this.idInvoiceDetail = idInvoiceDetail;
         this.productDescription = productDescription;
         this.code = code;
         this.unitPrice = unitPrice;
-        this.productAmount = productAmount;
+        this.amount = amount;
         this.subtotal = subtotal;
     }
 
-    private Integer idDetail;
-    private Integer productDescription;
+    private Integer idInvoiceDetail;
+    private String productDescription;
     private String  code;
-    private Integer unitPrice;
-    private Integer productAmount;
+    private Double unitPrice;
+    private Integer amount;
     private Double  subtotal;
 }

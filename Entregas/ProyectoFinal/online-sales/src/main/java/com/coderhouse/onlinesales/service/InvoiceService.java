@@ -1,8 +1,6 @@
 package com.coderhouse.onlinesales.service;
 
-import com.coderhouse.onlinesales.dto.ClientDTO;
-import com.coderhouse.onlinesales.dto.InvoiceDTO;
-import com.coderhouse.onlinesales.dto.InvoiceDetailDTO;
+import com.coderhouse.onlinesales.dto.*;
 import com.coderhouse.onlinesales.model.*;
 import com.coderhouse.onlinesales.repository.ClientRepository;
 import com.coderhouse.onlinesales.repository.InvoiceRepository;
@@ -31,7 +29,7 @@ public class InvoiceService {
     @Autowired
     private RestTemplate restTemplate;
 
-    public InvoiceDTO create(InvoiceDTO invoiceDTO) {
+    public InvoiceResponseDTO create(InvoiceDTO invoiceDTO) {
 
         boolean clientExists = clientExits(invoiceDTO.getClient().getId());
 
@@ -43,7 +41,7 @@ public class InvoiceService {
 
             Invoice invoice = createInvoice(invoiceDTO);
 
-            Set<InvoiceDetailDTO> invoiceDetailsDTO = this.getDTOFromInvoiceDetails(invoice.getInvoiceDetails());
+            Set<InvoiceDetailResponseDTO> invoiceDetailsDTO = this.getDTOFromInvoiceDetails(invoice.getInvoiceDetails());
 
             Client client = clientRepository.findById(invoiceDTO.getClient().getId()).get();
 
@@ -51,7 +49,7 @@ public class InvoiceService {
 
             Invoice invoiceSaved = invoiceRepository.save(invoice);
 
-            return new InvoiceDTO( invoiceSaved.getId(),
+            return new InvoiceResponseDTO( invoiceSaved.getId(),
                                    invoiceSaved.getDate(),
                                    invoiceSaved.getTotal(),
                                    clientDTO,
@@ -60,15 +58,15 @@ public class InvoiceService {
             return null;
     }
 
-    public InvoiceDTO findById(Integer id) {
+    public InvoiceResponseDTO findById(Integer id) {
         Optional<Invoice> invoiceOptional = invoiceRepository.findById(id);
 
         if(invoiceOptional.isPresent()){
             Invoice invoice = invoiceOptional.get();
-            Set<InvoiceDetailDTO> invoiceDetailsDTO = this.getDTOFromInvoiceDetails(invoice.getInvoiceDetails());
+            Set<InvoiceDetailResponseDTO> invoiceDetailsDTO = this.getDTOFromInvoiceDetails(invoice.getInvoiceDetails());
             Client client = clientRepository.findById(invoice.getClient().getId()).get();
             ClientDTO clientDTO = new ClientDTO(client.getId(), client.getFirstName(),client.getLastName(),client.getDocumentNumber());
-            return new InvoiceDTO(invoice.getId(), invoice.getDate(),invoice.getTotal(), clientDTO,invoiceDetailsDTO);
+            return new InvoiceResponseDTO(invoice.getId(), invoice.getDate(),invoice.getTotal(), clientDTO,invoiceDetailsDTO);
         }
         return null;
     }
@@ -167,17 +165,19 @@ public class InvoiceService {
         return invoiceDetails;
     }
 
-    public Set<InvoiceDetailDTO> getDTOFromInvoiceDetails(Set<InvoiceDetail> invoiceDetails){
-        Set<InvoiceDetailDTO> invoiceDetailsDTO = new HashSet<>();
+    public Set<InvoiceDetailResponseDTO> getDTOFromInvoiceDetails(Set<InvoiceDetail> invoiceDetails){
+        Set<InvoiceDetailResponseDTO> invoiceDetailsDTO = new HashSet<>();
 
         for(InvoiceDetail invoiceDetail : invoiceDetails){
             Integer id = invoiceDetail.getId();
+            Product product = productRepository.findById(invoiceDetail.getProduct().getId()).get();
+            String productDescription = product.getDescription();
+            String  code = product.getCode();
+            Double unitPrice = product.getUnitPrice();
             Integer productAmount = invoiceDetail.getProductAmount();
             Double subtotal = invoiceDetail.getSubtotal();
-            Integer idInvoice = invoiceDetail.getInvoice().getId();
-            Integer idProduct = invoiceDetail.getProduct().getId();
 
-            invoiceDetailsDTO.add(new InvoiceDetailDTO(id,productAmount,subtotal,idInvoice,idProduct));
+            invoiceDetailsDTO.add(new InvoiceDetailResponseDTO(id,productDescription,code,unitPrice,productAmount,subtotal));
         }
         return invoiceDetailsDTO;
     }

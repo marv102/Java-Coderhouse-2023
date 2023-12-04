@@ -2,6 +2,7 @@ package com.coderhouse.onlinesales.controller;
 
 import com.coderhouse.onlinesales.dto.ClientDTO;
 import com.coderhouse.onlinesales.dto.InvoiceDTO;
+import com.coderhouse.onlinesales.dto.InvoiceResponseDTO;
 import com.coderhouse.onlinesales.model.Client;
 import com.coderhouse.onlinesales.model.Invoice;
 import com.coderhouse.onlinesales.service.ClientService;
@@ -18,13 +19,13 @@ public class InvoiceController {
     private InvoiceService invoiceService;
 
     @PostMapping("/")
-    public ResponseEntity<InvoiceDTO> create (@RequestBody InvoiceDTO invoiceDTO) {
-        return new ResponseEntity<InvoiceDTO>(invoiceService.create(invoiceDTO), HttpStatus.OK);
+    public ResponseEntity<InvoiceResponseDTO> create (@RequestBody InvoiceDTO invoiceDTO) {
+        return new ResponseEntity<InvoiceResponseDTO>(invoiceService.create(invoiceDTO), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<InvoiceDTO> findById(@PathVariable Integer id) {
-        return new ResponseEntity<InvoiceDTO>(invoiceService.findById(id), HttpStatus.OK);
+    public ResponseEntity<InvoiceResponseDTO> findById(@PathVariable Integer id) {
+        return new ResponseEntity<InvoiceResponseDTO>(invoiceService.findById(id), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
