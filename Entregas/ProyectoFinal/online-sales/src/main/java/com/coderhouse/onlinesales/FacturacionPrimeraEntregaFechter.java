@@ -12,8 +12,6 @@ import java.time.LocalDateTime;
 
 @SpringBootApplication
 public class FacturacionPrimeraEntregaFechter{
-	@Autowired
-	private RestTemplate restTemplate;
 
 	public static void main(String[] args) {
 		SpringApplication.run(FacturacionPrimeraEntregaFechter.class, args);

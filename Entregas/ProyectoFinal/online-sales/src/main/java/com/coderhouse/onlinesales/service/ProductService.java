@@ -2,12 +2,14 @@ package com.coderhouse.onlinesales.service;
 
 import com.coderhouse.onlinesales.dto.InvoiceDTO;
 import com.coderhouse.onlinesales.dto.ProductDTO;
+import com.coderhouse.onlinesales.model.Client;
 import com.coderhouse.onlinesales.model.Invoice;
 import com.coderhouse.onlinesales.model.Product;
 import com.coderhouse.onlinesales.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 @Service
 public class ProductService {
@@ -29,7 +31,9 @@ public class ProductService {
         return null;
     }
 
-    public void deleteById(Integer id){
-        productRepository.deleteById(id);
+    public List<Product> findAll() {
+        return productRepository.findAll();
     }
+
+
 }

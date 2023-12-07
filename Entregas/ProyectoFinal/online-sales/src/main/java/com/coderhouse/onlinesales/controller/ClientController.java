@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(path = "client")
 public class ClientController {
@@ -25,8 +27,8 @@ public class ClientController {
         return new ResponseEntity<ClientDTO>(clientService.findById(id), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable Integer id) {
-        clientService.deleteById(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<List<Client>> findAll(@PathVariable Integer id) {
+        return new ResponseEntity<List<Client>>(clientService.findAll(), HttpStatus.OK);
     }
 }

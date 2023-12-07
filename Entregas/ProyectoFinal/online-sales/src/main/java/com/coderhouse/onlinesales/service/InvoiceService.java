@@ -71,10 +71,6 @@ public class InvoiceService {
         return null;
     }
 
-    public void deleteById(Integer id){
-        invoiceRepository.deleteById(id);
-    }
-
     public boolean clientExits(Integer id){
         Optional<Client> clientOptional = clientRepository.findById(id);
         return clientOptional.isPresent() ? true : false;
@@ -136,6 +132,10 @@ public class InvoiceService {
         this.updateStock(invoiceDetails);
 
         return savedInvoice;
+    }
+
+    public List<Invoice> findAll() {
+        return invoiceRepository.findAll();
     }
 
     public Double calculateTotal(Set<InvoiceDetail> invoiceDetails){

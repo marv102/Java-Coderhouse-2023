@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.List;
 import java.util.Optional;
 @Service
 public class ClientService {
@@ -30,8 +31,8 @@ public class ClientService {
         return null;
     }
 
-    public void deleteById(Integer id){
-        clientRepository.deleteById(id);
+    public List<Client> findAll() {
+        return clientRepository.findAll();
     }
 
 }
