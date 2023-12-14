@@ -5,7 +5,6 @@ import com.coderhouse.onlinesales.model.Client;
 import com.coderhouse.onlinesales.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +26,7 @@ public class ClientController {
         return new ResponseEntity<ClientDTO>(clientService.findById(id), HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/")
     public ResponseEntity<List<Client>> findAll(@PathVariable Integer id) {
         return new ResponseEntity<List<Client>>(clientService.findAll(), HttpStatus.OK);
     }

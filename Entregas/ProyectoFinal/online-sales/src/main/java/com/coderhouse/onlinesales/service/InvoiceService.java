@@ -1,20 +1,21 @@
 package com.coderhouse.onlinesales.service;
 
-import com.coderhouse.onlinesales.dto.*;
+import com.coderhouse.onlinesales.dto.request.InvoiceDTO;
+import com.coderhouse.onlinesales.dto.request.InvoiceDetailDTO;
+import com.coderhouse.onlinesales.dto.ClientDTO;
+import com.coderhouse.onlinesales.dto.response.InvoiceDetailResponseDTO;
+import com.coderhouse.onlinesales.dto.response.InvoiceResponseDTO;
 import com.coderhouse.onlinesales.model.*;
 import com.coderhouse.onlinesales.repository.ClientRepository;
 import com.coderhouse.onlinesales.repository.InvoiceRepository;
 import com.coderhouse.onlinesales.repository.ProductRepository;
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.*;
 
 @Service
@@ -41,7 +42,7 @@ public class InvoiceService {
 
             Invoice invoice = createInvoice(invoiceDTO);
 
-            Set<InvoiceDetailResponseDTO> invoiceDetailsDTO = this.getDTOFromInvoiceDetails(invoice.getInvoiceDetails());
+            Set<InvoiceDetailResponseDTO> detailsResponseDTO = this.getDTOFromInvoiceDetails(invoice.getInvoiceDetails());
 
             Client client = clientRepository.findById(invoiceDTO.getClient().getId()).get();
 
@@ -49,11 +50,14 @@ public class InvoiceService {
 
             Invoice invoiceSaved = invoiceRepository.save(invoice);
 
+            Integer productQuantity = calculateAmount(detailsResponseDTO);
+
             return new InvoiceResponseDTO( invoiceSaved.getId(),
-                                   invoiceSaved.getDate(),
-                                   invoiceSaved.getTotal(),
-                                   clientDTO,
-                                   invoiceDetailsDTO);
+                                           invoiceSaved.getDate(),
+                                           invoiceSaved.getTotal(),
+                                           productQuantity,
+                                           clientDTO,
+                                           detailsResponseDTO );
         }
             return null;
     }
@@ -66,7 +70,8 @@ public class InvoiceService {
             Set<InvoiceDetailResponseDTO> invoiceDetailsDTO = this.getDTOFromInvoiceDetails(invoice.getInvoiceDetails());
             Client client = clientRepository.findById(invoice.getClient().getId()).get();
             ClientDTO clientDTO = new ClientDTO(client.getId(), client.getFirstName(),client.getLastName(),client.getDocumentNumber());
-            return new InvoiceResponseDTO(invoice.getId(), invoice.getDate(),invoice.getTotal(), clientDTO,invoiceDetailsDTO);
+            Integer productQuantity = calculateAmount(invoiceDetailsDTO);
+            return new InvoiceResponseDTO(invoice.getId(), invoice.getDate(),invoice.getTotal(),productQuantity, clientDTO,invoiceDetailsDTO);
         }
         return null;
     }
@@ -112,10 +117,16 @@ public class InvoiceService {
     }
 
     public Invoice createInvoice(InvoiceDTO invoiceDTO){
+        LocalDateTime date;
 
-        WorldTime worldTime = this.restTemplate.getForObject("https://worldtimeapi.org/api/timezone/America/Argentina/Buenos_Aires",WorldTime.class);
+        try {
+            WorldClock worldClock = this.restTemplate.getForObject("http://worldclockapi.com/api/json/utc/now",WorldClock.class);
 
-        LocalDateTime date = worldTime.getLocalDateTime();
+            date = worldClock.getLocalDateTime();
+
+        }catch (RestClientException re){
+            date = LocalDateTime.now();
+        }
 
         Set<InvoiceDetail> invoiceDetails = getInvoiceDetailsFromDTO(invoiceDTO.getInvoiceDetails());
 
@@ -144,6 +155,20 @@ public class InvoiceService {
         for(InvoiceDetail invoiceDetail : invoiceDetails){
             try{
                 total+=invoiceDetail.getSubtotal();
+            }catch (NullPointerException ne){
+                System.out.println("Total invoice details could not be calculated; the subtotals are empty");
+            }
+        }
+
+        return total;
+    }
+
+    public Integer calculateAmount(Set<InvoiceDetailResponseDTO> invoiceDetails){
+        Integer total = 0;
+
+        for(InvoiceDetailResponseDTO invoiceDetail : invoiceDetails){
+            try{
+                total+=invoiceDetail.getAmount();
             }catch (NullPointerException ne){
                 System.out.println("Total invoice details could not be calculated; the subtotals are empty");
             }

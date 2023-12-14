@@ -1,4 +1,4 @@
-package com.coderhouse.onlinesales.dto;
+package com.coderhouse.onlinesales.dto.response;
 
 import com.coderhouse.onlinesales.model.Invoice;
 import lombok.Data;
@@ -12,6 +12,9 @@ public class InvoiceDetailResponseDTO {
         this.unitPrice = unitPrice;
         this.amount = amount;
         this.subtotal = subtotal;
+    }
+
+    public InvoiceDetailResponseDTO() {
     }
 
     private Integer idInvoiceDetail;

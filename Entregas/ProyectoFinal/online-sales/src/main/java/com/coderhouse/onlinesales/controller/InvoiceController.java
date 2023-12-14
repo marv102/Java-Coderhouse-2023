@@ -1,12 +1,8 @@
 package com.coderhouse.onlinesales.controller;
 
-import com.coderhouse.onlinesales.dto.ClientDTO;
-import com.coderhouse.onlinesales.dto.InvoiceDTO;
-import com.coderhouse.onlinesales.dto.InvoiceResponseDTO;
-import com.coderhouse.onlinesales.model.Client;
+import com.coderhouse.onlinesales.dto.request.InvoiceDTO;
+import com.coderhouse.onlinesales.dto.response.InvoiceResponseDTO;
 import com.coderhouse.onlinesales.model.Invoice;
-import com.coderhouse.onlinesales.model.Product;
-import com.coderhouse.onlinesales.service.ClientService;
 import com.coderhouse.onlinesales.service.InvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "invoice/")
+@RequestMapping(path = "invoice")
 public class InvoiceController {
     @Autowired
     private InvoiceService invoiceService;
@@ -31,7 +27,7 @@ public class InvoiceController {
         return new ResponseEntity<InvoiceResponseDTO>(invoiceService.findById(id), HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/")
     public ResponseEntity<List<Invoice>> findAll(@PathVariable Integer id) {
         return new ResponseEntity<List<Invoice>>(invoiceService.findAll(), HttpStatus.OK);
     }

@@ -12,19 +12,9 @@ public class ProductDTO {
         this.unitPrice = unitPrice;
     }
 
-    public ProductDTO(String code, String description, Integer stock, Double unitPrice) {
-        this.code = code;
-        this.description = description;
-        this.stock = stock;
-        this.unitPrice = unitPrice;
-    }
-
-    public ProductDTO(Integer id) {
-        this.id = id;
-    }
-
     public ProductDTO() {
     }
+
     private Integer id;
     private String code;
     private String description;

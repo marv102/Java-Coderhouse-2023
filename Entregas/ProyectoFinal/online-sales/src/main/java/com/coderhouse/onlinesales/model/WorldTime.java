@@ -27,7 +27,7 @@ public class WorldTime {
     private String utcOffset;
 
 
-    public LocalDateTime getLocalDateTime(){return convertToLocalDateTime(this.utcDatetime, this.utcOffset);}
+    public LocalDateTime getLocalDateTime(){ return convertToLocalDateTime(this.utcDatetime, this.utcOffset); }
     public LocalDateTime convertToLocalDateTime (String utcDatetime, String utcOffset){
 
         OffsetDateTime dateTime = OffsetDateTime.parse(utcDatetime);
