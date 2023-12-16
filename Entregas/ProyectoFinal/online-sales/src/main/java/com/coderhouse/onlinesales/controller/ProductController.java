@@ -1,8 +1,10 @@
 package com.coderhouse.onlinesales.controller;
 
 import com.coderhouse.onlinesales.dto.ProductDTO;
+import com.coderhouse.onlinesales.exception.ProductException;
 import com.coderhouse.onlinesales.model.Product;
 import com.coderhouse.onlinesales.service.ProductService;
+import com.coderhouse.onlinesales.validator.ProductValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +18,12 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private ProductValidator productValidator;
+
     @PostMapping("/")
-    public ResponseEntity<ProductDTO> create (@RequestBody Product product) {
+    public ResponseEntity<ProductDTO> create (@RequestBody Product product) throws ProductException {
+        productValidator.validate(product);
         return new ResponseEntity<ProductDTO>(productService.create(product), HttpStatus.OK);
     }
 
@@ -26,7 +32,7 @@ public class ProductController {
         return new ResponseEntity<ProductDTO>(productService.findById(id), HttpStatus.OK);
     }
     @GetMapping("/")
-    public ResponseEntity<List<Product>> findAll(@PathVariable Integer id) {
+    public ResponseEntity<List<Product>> findAll() {
         return new ResponseEntity<List<Product>>(productService.findAll(), HttpStatus.OK);
     }
 

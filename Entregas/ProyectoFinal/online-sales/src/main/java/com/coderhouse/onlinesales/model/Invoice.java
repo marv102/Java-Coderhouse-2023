@@ -1,5 +1,6 @@
 package com.coderhouse.onlinesales.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
@@ -42,6 +43,7 @@ public class Invoice {
     @ManyToOne
     @JoinColumn(name = "client_id",nullable = false)
     private Client client;
+    @JsonManagedReference
     @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL)
     private Set<InvoiceDetail> invoiceDetails;
 

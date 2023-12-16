@@ -1,5 +1,6 @@
 package com.coderhouse.onlinesales.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
@@ -34,6 +35,7 @@ public class InvoiceDetail {
     @Column(name = "product_amount")
     private Integer productAmount;
     private Double subtotal;
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "invoice_id",nullable = false)
     private Invoice invoice;

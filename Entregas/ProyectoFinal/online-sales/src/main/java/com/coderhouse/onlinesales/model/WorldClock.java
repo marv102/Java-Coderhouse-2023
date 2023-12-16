@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
+//Class used for mapping WorldClockAPI Json Data
 public class WorldClock {
 
     public WorldClock() {

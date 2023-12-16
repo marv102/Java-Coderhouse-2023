@@ -5,10 +5,12 @@ import com.coderhouse.onlinesales.dto.request.InvoiceDetailDTO;
 import com.coderhouse.onlinesales.dto.ClientDTO;
 import com.coderhouse.onlinesales.dto.response.InvoiceDetailResponseDTO;
 import com.coderhouse.onlinesales.dto.response.InvoiceResponseDTO;
+import com.coderhouse.onlinesales.exception.InvoiceException;
 import com.coderhouse.onlinesales.model.*;
 import com.coderhouse.onlinesales.repository.ClientRepository;
 import com.coderhouse.onlinesales.repository.InvoiceRepository;
 import com.coderhouse.onlinesales.repository.ProductRepository;
+import com.coderhouse.onlinesales.validator.InvoiceValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
@@ -30,13 +32,18 @@ public class InvoiceService {
     @Autowired
     private RestTemplate restTemplate;
 
-    public InvoiceResponseDTO create(InvoiceDTO invoiceDTO) {
+    @Autowired
+    private InvoiceValidator invoiceValidator;
+
+    public InvoiceResponseDTO create(InvoiceDTO invoiceDTO) throws InvoiceException {
 
         boolean clientExists = clientExits(invoiceDTO.getClient().getId());
 
         boolean productsExist = productsExist(invoiceDTO.getInvoiceDetails());
 
         boolean stockExists = stockExists(invoiceDTO.getInvoiceDetails());
+
+        invoiceValidator.validate(clientExists, stockExists, productsExist);
 
         if (clientExists && productsExist && stockExists) {
 
@@ -68,6 +75,11 @@ public class InvoiceService {
         if(invoiceOptional.isPresent()){
             Invoice invoice = invoiceOptional.get();
             Set<InvoiceDetailResponseDTO> invoiceDetailsDTO = this.getDTOFromInvoiceDetails(invoice.getInvoiceDetails());
+
+            for (InvoiceDetailResponseDTO detailDTO : invoiceDetailsDTO){
+                detailDTO.setUnitPrice(detailDTO.getSubtotal()/detailDTO.getAmount());
+            }
+
             Client client = clientRepository.findById(invoice.getClient().getId()).get();
             ClientDTO clientDTO = new ClientDTO(client.getId(), client.getFirstName(),client.getLastName(),client.getDocumentNumber());
             Integer productQuantity = calculateAmount(invoiceDetailsDTO);
@@ -84,7 +96,7 @@ public class InvoiceService {
     public boolean productsExist(Set<InvoiceDetailDTO> invoiceDetails){
         for(InvoiceDetailDTO invoiceDetail : invoiceDetails){
 
-            Optional<Product> productOptional = productRepository.findById(invoiceDetail.getIdProduct());
+            Optional<Product> productOptional = productRepository.findById(invoiceDetail.getProduct().getId());
 
             if(productOptional.isEmpty()) return false;
         }
@@ -98,13 +110,13 @@ public class InvoiceService {
 
             for(InvoiceDetailDTO invoiceDetail : invoiceDetails){
 
-                Product product = productRepository.findById(invoiceDetail.getIdProduct()).get();
+                Product product = productRepository.findById(invoiceDetail.getProduct().getId()).get();
                 Integer stockAvailable = product.getStock();
                 Integer quantityAsked = 0;
 
                 for(InvoiceDetailDTO innerInvoiceDetail : invoiceDetails){
 
-                    if(product.getId().equals(innerInvoiceDetail.getIdProduct())){
+                    if(product.getId().equals(innerInvoiceDetail.getProduct().getId())){
                         quantityAsked += innerInvoiceDetail.getProductAmount();
                     }
                 }
@@ -120,8 +132,9 @@ public class InvoiceService {
         LocalDateTime date;
 
         try {
-            WorldClock worldClock = this.restTemplate.getForObject("http://worldclockapi.com/api/json/utc/now",WorldClock.class);
-
+            WorldClock worldClock =
+                    this.restTemplate.getForObject("http://worldclockapi.com/api/json/utc/now",
+                                                        WorldClock.class);
             date = worldClock.getLocalDateTime();
 
         }catch (RestClientException re){
@@ -145,9 +158,6 @@ public class InvoiceService {
         return savedInvoice;
     }
 
-    public List<Invoice> findAll() {
-        return invoiceRepository.findAll();
-    }
 
     public Double calculateTotal(Set<InvoiceDetail> invoiceDetails){
         Double total = 0d;
@@ -170,7 +180,7 @@ public class InvoiceService {
             try{
                 total+=invoiceDetail.getAmount();
             }catch (NullPointerException ne){
-                System.out.println("Total invoice details could not be calculated; the subtotals are empty");
+                System.out.println("Total product amount could not be calculated; there are empty amounts");
             }
         }
 
@@ -182,7 +192,7 @@ public class InvoiceService {
 
         for(InvoiceDetailDTO invoiceDetailDTO : invoiceDetailsDTO){
             Integer productAmount = invoiceDetailDTO.getProductAmount();
-            Product product = productRepository.findById(invoiceDetailDTO.getIdProduct()).get();
+            Product product = productRepository.findById(invoiceDetailDTO.getProduct().getId()).get();
             Double subtotal = productAmount * product.getUnitPrice();
 
             invoiceDetails.add(new InvoiceDetail(productAmount,subtotal,product));

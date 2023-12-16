@@ -11,7 +11,7 @@ import java.time.*;
 
 @Getter
 @Setter
-//Class used for mapping WorldTimeAPI Json Data
+//Class used for mapping WorldTimeAPI Json Data (Not being used)
 public class WorldTime {
     public WorldTime() {
     }

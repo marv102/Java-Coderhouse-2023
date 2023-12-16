@@ -1,0 +1,420 @@
+{
+	"info": {
+		"_postman_id": "dcbf0f1c-61c3-43f6-b4c5-0441ed609824",
+		"name": "Java Coderhouse Project",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "31835399"
+	},
+	"item": [
+		{
+			"name": "Client",
+			"item": [
+				{
+					"name": "Document ERROR",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\":\"Pedro\",\r\n    \"lastName\":\"Dominguez\"\r\n}"
+						},
+						"url": "http://localhost:9500/client/"
+					},
+					"response": []
+				},
+				{
+					"name": "Document Format ERROR",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\":\"Pedro\",\r\n    \"lastName\":\"Dominguez\",\r\n    \"documentNumber\":123123\r\n}"
+						},
+						"url": "http://localhost:9500/client/"
+					},
+					"response": []
+				},
+				{
+					"name": "POST",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\":\"Pedro\",\r\n    \"lastName\":\"Dominguez\",\r\n    \"documentNumber\":88224466\r\n}"
+						},
+						"url": "http://localhost:9500/client/"
+					},
+					"response": []
+				},
+				{
+					"name": "PUT",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\":\"Juan\",\r\n    \"lastName\":\"Banderas\",\r\n    \"documentNumber\":66662222\r\n}"
+						},
+						"url": "http://localhost:9500/client/4"
+					},
+					"response": []
+				},
+				{
+					"name": "GET ALL",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": "http://localhost:9500/client/"
+					},
+					"response": []
+				},
+				{
+					"name": "FIND BY ID",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": "http://localhost:9500/client/4"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Product",
+			"item": [
+				{
+					"name": "Code ERROR",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"description\":\"Remera Large\",\r\n    \"stock\":200,\r\n    \"unitPrice\":25\r\n}"
+						},
+						"url": "http://localhost:9500/product/"
+					},
+					"response": []
+				},
+				{
+					"name": "Stock ERROR",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"code\":12312233,\r\n    \"description\":\"Remera Large\",\r\n    \"unitPrice\":25\r\n}"
+						},
+						"url": "http://localhost:9500/product/"
+					},
+					"response": []
+				},
+				{
+					"name": "Unit Price ERROR",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"code\":12312233,\r\n    \"description\":\"Remera Large\",\r\n    \"stock\":200\r\n}"
+						},
+						"url": "http://localhost:9500/product/"
+					},
+					"response": []
+				},
+				{
+					"name": "Negative Stock ERROR",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"code\":12312233,\r\n    \"description\":\"Remera Large\",\r\n    \"stock\":-200,\r\n    \"unitPrice\":25\r\n}"
+						},
+						"url": "http://localhost:9500/product/"
+					},
+					"response": []
+				},
+				{
+					"name": "Negative Unit Price ERROR",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"code\":12312233,\r\n    \"description\":\"Remera Large\",\r\n    \"stock\":200,\r\n    \"unitPrice\":-25\r\n}"
+						},
+						"url": "http://localhost:9500/product/"
+					},
+					"response": []
+				},
+				{
+					"name": "POST",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"code\":12312233,\r\n    \"description\":\"Remera Large\",\r\n    \"stock\":200,\r\n    \"unitPrice\":25\r\n}"
+						},
+						"url": "http://localhost:9500/product/"
+					},
+					"response": []
+				},
+				{
+					"name": "PUT",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"code\":22211122,\r\n    \"description\":\"Remera\",\r\n    \"stock\":100,\r\n    \"unitPrice\":50\r\n}"
+						},
+						"url": "http://localhost:9500/product/4"
+					},
+					"response": []
+				},
+				{
+					"name": "GET ALL",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"code\":12312233,\r\n    \"description\":\"Remera Large\",\r\n    \"stock\":100,\r\n    \"unitPrice\":25\r\n}"
+						},
+						"url": "http://localhost:9500/product/"
+					},
+					"response": []
+				},
+				{
+					"name": "FIND BY ID",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": "http://localhost:9500/product/4"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Invoice",
+			"item": [
+				{
+					"name": "Client Non Existent ERROR",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"client\":{\r\n        \"id\":8\r\n    },\r\n    \"invoiceDetails\": [\r\n        {\r\n            \"productAmount\": 1,\r\n            \"product\": {\r\n                \"id\":5\r\n            }\r\n        },\r\n        {\r\n            \"productAmount\": 2,\r\n             \"product\": {\r\n                \"id\":3\r\n            }\r\n        }\r\n    ]\r\n     \r\n}"
+						},
+						"url": "http://localhost:9500/invoice/"
+					},
+					"response": []
+				},
+				{
+					"name": "Product Non Existent ERROR",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"client\":{\r\n        \"id\":3\r\n    },\r\n    \"invoiceDetails\": [\r\n        {\r\n            \"productAmount\": 1,\r\n            \"product\": {\r\n                \"id\":7\r\n            }\r\n        },\r\n        {\r\n            \"productAmount\": 2,\r\n             \"product\": {\r\n                \"id\":3\r\n            }\r\n        }\r\n    ]\r\n     \r\n}"
+						},
+						"url": "http://localhost:9500/invoice/"
+					},
+					"response": []
+				},
+				{
+					"name": "Not Enough Stock ERROR",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"client\":{\r\n        \"id\":3\r\n    },\r\n    \"invoiceDetails\": [\r\n        {\r\n            \"productAmount\": 200,\r\n            \"product\": {\r\n                \"id\":1\r\n            }\r\n        },\r\n        {\r\n            \"productAmount\": 2,\r\n             \"product\": {\r\n                \"id\":3\r\n            }\r\n        }\r\n    ]\r\n     \r\n}"
+						},
+						"url": "http://localhost:9500/invoice/"
+					},
+					"response": []
+				},
+				{
+					"name": "POST",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"client\":{\r\n        \"id\":3\r\n    },\r\n    \"invoiceDetails\": [\r\n        {\r\n            \"productAmount\": 10,\r\n            \"product\": {\r\n                \"id\":1\r\n            }\r\n        },\r\n        {\r\n            \"productAmount\": 2,\r\n             \"product\": {\r\n                \"id\":3\r\n            }\r\n        }\r\n    ]\r\n     \r\n}"
+						},
+						"url": "http://localhost:9500/invoice/"
+					},
+					"response": []
+				},
+				{
+					"name": "FIND BY ID",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"client\":{\r\n        \"id\":3\r\n    },\r\n    \"invoiceDetails\": [\r\n        {\r\n            \"productAmount\": 10,\r\n            \"product\": {\r\n                \"id\":1\r\n            }\r\n        },\r\n        {\r\n            \"productAmount\": 2,\r\n             \"product\": {\r\n                \"id\":3\r\n            }\r\n        }\r\n    ]\r\n     \r\n}"
+						},
+						"url": "http://localhost:9500/invoice/1"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -1,7 +1,9 @@
 package com.coderhouse.onlinesales.service;
 
 import com.coderhouse.onlinesales.dto.ClientDTO;
+import com.coderhouse.onlinesales.dto.ProductDTO;
 import com.coderhouse.onlinesales.model.Client;
+import com.coderhouse.onlinesales.model.Product;
 import com.coderhouse.onlinesales.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,4 +34,19 @@ public class ClientService {
         return clientRepository.findAll();
     }
 
+    public ClientDTO updateById(Integer id, ClientDTO clientDTO) {
+        ClientDTO clientFound = this.findById(id);
+
+        if (!clientFound.equals(null)) {
+            Client client = new Client();
+            client.setId(id);
+            client.setFirstName(clientDTO.getFirstName());
+            client.setLastName(clientDTO.getLastName());
+            client.setDocumentNumber(clientDTO.getDocumentNumber());
+            clientRepository.save(client);
+            clientDTO.setId(id);
+            return clientDTO;
+        }
+        return null;
+    }
 }
